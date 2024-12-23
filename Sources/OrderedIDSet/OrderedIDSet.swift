@@ -433,3 +433,6 @@ extension OrderedIDSet: Sequence {
         }
     }
 }
+
+// unchecked untill OrderedDictionary conforms to Sendable
+extension OrderedIDSet: @unchecked Sendable {}
