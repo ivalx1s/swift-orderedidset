@@ -458,5 +458,33 @@ extension OrderedIDSet {
     }
 }
 
+extension OrderedIDSet {
+    /// Returns an `OrderedIDSet` containing the results of mapping the given closure
+    /// over this `OrderedIDSet`'s elements.
+    ///
+    /// - Parameter transform: A mapping closure. `transform` accepts an
+    ///   element of this sequence as its parameter and returns a transformed
+    ///   value of the same or different type, which must also be `Identifiable` & `Hashable`.
+    /// - Returns: An `OrderedIDSet` containing the transformed elements of this
+    ///   `OrderedIDSet`.
+    @inlinable
+    public func map<Transformed, E>(
+        _ transform: (Element) throws(E) -> Transformed
+    ) rethrows -> OrderedIDSet<Transformed>
+    where
+    E: Error,
+    Transformed: Identifiable & Hashable
+    {
+        var newSet = OrderedIDSet<Transformed>()
+        newSet._elements.reserveCapacity(self.count)
+        
+        for element in self {
+            let transformed = try transform(element)
+            newSet.insert(transformed)
+        }
+        return newSet
+    }
+}
+
 // unchecked untill OrderedDictionary conforms to Sendable
 extension OrderedIDSet: @unchecked Sendable {}
