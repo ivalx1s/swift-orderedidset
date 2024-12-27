@@ -434,5 +434,29 @@ extension OrderedIDSet: Sequence {
     }
 }
 
+extension OrderedIDSet {
+    /// Returns an `OrderedIDSet` containing the non-`nil` results of calling
+    /// the given transformation with each element of this `OrderedIDSet`.
+    ///
+    /// - Parameter transform: A closure that accepts an element of this
+    ///   `OrderedIDSet` as its argument and returns an optional value.
+    /// - Returns: An `OrderedIDSet` of the non-`nil` results of calling
+    ///   `transform` with each element of the `OrderedIDSet`.
+    ///
+    /// - Complexity: O(*n*), where *n* is the length of this `OrderedIDSet`.
+    @inlinable
+    public func compactMap<Transformed>(
+        _ transform: (Element) throws -> Transformed?
+    ) rethrows -> OrderedIDSet<Transformed> where Transformed: Identifiable & Hashable {
+        var newSet = OrderedIDSet<Transformed>()
+        for element in self {
+            if let transformed = try transform(element) {
+                newSet.insert(transformed)
+            }
+        }
+        return newSet
+    }
+}
+
 // unchecked untill OrderedDictionary conforms to Sendable
 extension OrderedIDSet: @unchecked Sendable {}
