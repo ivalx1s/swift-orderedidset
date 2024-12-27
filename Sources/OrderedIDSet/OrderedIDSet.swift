@@ -265,8 +265,8 @@ extension OrderedIDSet {
     /// - Returns: Элемент с указанным идентификатором, если он существует; в противном случае `nil`.
     ///
     /// - Complexity: O(1)
-    // periphery:ignore
-    public subscript(id id: Element.ID) -> Element? {
+    public subscript(id id: Element.ID?) -> Element? {
+        guard let id else { return nil }
         return _elements[id]
     }
 }
